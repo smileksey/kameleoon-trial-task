@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск книги</title>
+</head>
+<body>
+
+<form th:action="@{/books/find}">
+    <label for="title">Введите название книги: </label>
+    <input type="text" th:name="titleStartingWith" id="title"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Искать"/>
+</form>
+
+<hr/>
+
+<form th:method="GET" th:action="@{/books}">
+    <input type="submit" value="К списку книг"/>
+</form>
+<br/>
+
+<form th:method="GET" th:action="@{/}">
+    <input type="submit" value="На главную"/>
+</form>
+
+</body>
+</html>
