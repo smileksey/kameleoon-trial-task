@@ -20,18 +20,20 @@ public class UsersService {
         this.usersRepository = usersRepository;
     }
 
+    //сохранение нового пользователя в БД
     @Transactional
     public void createUser(User user) {
         enrichUserData(user);
         usersRepository.save(user);
     }
 
+    //получить зарегестрированного пользователя из БД по email
     public Optional<User> findByEmail(String email) {
         return usersRepository.findByEmail(email);
     }
 
 
-
+    //добавление недостающей информации в объект User - дата регистрации
     private void enrichUserData(User user) {
         user.setDateOfCreation(new Date());
     }

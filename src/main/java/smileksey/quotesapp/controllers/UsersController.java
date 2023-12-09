@@ -27,11 +27,14 @@ public class UsersController {
         this.validator = validator;
     }
 
+    //регистрация нового пользователя
     @PostMapping("/register")
     public ResponseEntity<HttpStatus> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
 
+        //валидация
         validator.validate(userDto, bindingResult);
 
+        //если есть ошибки валидации - выбрасываем искличение UserNotRegisteredException
         if (bindingResult.hasErrors()) {
             String errorMessage = ValidationErrorMessage.createMessage(bindingResult.getFieldErrors());
             throw new UserNotRegisteredException(errorMessage);
@@ -42,6 +45,7 @@ public class UsersController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //конвертация объекта UserDto в объект User
     private User converToUser(UserDto userDto) {
         User user = new User();
 
@@ -52,6 +56,7 @@ public class UsersController {
         return user;
     }
 
+    //обработка исключения UserNotRegisteredException - отправка сообщения об ошибке клиенту
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(UserNotRegisteredException e) {
 

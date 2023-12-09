@@ -3,12 +3,12 @@ package smileksey.quotesapp.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import smileksey.quotesapp.models.User;
 
 import java.util.Date;
 
 public class QuoteDto {
 
+    private int id;
     @NotNull
     @NotEmpty(message = "Content of a quote cannot be empty")
     private String content;
@@ -16,9 +16,20 @@ public class QuoteDto {
     @NotNull
     @Email(message = "Email is not valid")
     private String userEmail;
+    @NotNull
+    @NotEmpty(message = "User's password cannot be empty")
+    private String userPassword;
     private int votes;
     private Date dateOfCreation;
     private Date dateOfUpdate;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getContent() {
         return content;
@@ -66,5 +77,13 @@ public class QuoteDto {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }

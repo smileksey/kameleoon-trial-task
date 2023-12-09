@@ -5,10 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import smileksey.quotesapp.dto.QuoteDto;
-import smileksey.quotesapp.services.QuotesService;
 import smileksey.quotesapp.services.UsersService;
 
-
+//валидатор для приходящих от клиента объектов QuoteDto
 @Component
 public class QuoteValidator implements Validator {
 

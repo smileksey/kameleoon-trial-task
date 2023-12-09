@@ -35,6 +35,7 @@ public class QuotesController {
         this.validator = validator;
     }
 
+    //добавить новую цитату
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> addQuote(@RequestBody @Valid QuoteDto quoteDto, BindingResult bindingResult) {
 
@@ -50,26 +51,31 @@ public class QuotesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //получить цитату по id
     @GetMapping("/{id}")
     public QuoteDto getQuote(@PathVariable("id") int id) {
         return convertToQuoteDto(quotesService.findById(id));
     }
 
+    //получить случайную цитату
     @GetMapping("/random")
     public QuoteDto getRandomQuote() {
         return convertToQuoteDto(quotesService.findRandomQuote());
     }
 
+    //получить топ 10 цитат с наилучшими оценками
     @GetMapping("/top10")
     public List<QuoteDto> getTopTen() {
         return quotesService.findTopTen().stream().map(quote -> convertToQuoteDto(quote)).collect(Collectors.toList());
     }
 
+    //получить топ 10 цитат с наихудшими оценками
     @GetMapping("/worst10")
     public List<QuoteDto> getWorstTen() {
         return quotesService.findWorstTen().stream().map(quote -> convertToQuoteDto(quote)).collect(Collectors.toList());
     }
 
+    //удалить конкретную цитату
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
 
@@ -78,10 +84,9 @@ public class QuotesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //изменить существующую цитату
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid QuoteDto quoteDto, BindingResult bindingResult, @PathVariable("id") int id) {
-
-        validator.validate(quoteDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             String errorMessage = ValidationErrorMessage.createMessage(bindingResult.getFieldErrors());
@@ -93,6 +98,7 @@ public class QuotesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //голосовать "за" конкретную цитату
     @PatchMapping("/{id}/upvote")
     public ResponseEntity<HttpStatus> upvote(@PathVariable("id") int id) {
 
@@ -101,6 +107,7 @@ public class QuotesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //голосовать "против" конкретной цитаты
     @PatchMapping("/{id}/downvote")
     public ResponseEntity<HttpStatus> downvote(@PathVariable("id") int id) {
 
@@ -109,7 +116,7 @@ public class QuotesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-
+    //конвертировать объект QuoteDto в объект Quote
     private Quote convertToQuote(QuoteDto quoteDto) {
         Quote quote = new Quote();
 
@@ -117,15 +124,18 @@ public class QuotesController {
 
         User user = new User();
         user.setEmail(quoteDto.getUserEmail());
+        user.setPassword(quoteDto.getUserPassword());
 
         quote.setUser(user);
 
         return quote;
     }
 
+    //конвертировать объект Quote в объект QuoteDto
     private QuoteDto convertToQuoteDto(Quote quote) {
         QuoteDto quoteDto = new QuoteDto();
 
+        quoteDto.setId(quote.getId());
         quoteDto.setContent(quote.getContent());
         quoteDto.setVotes(quote.getVotes());
         quoteDto.setDateOfCreation(quote.getDateOfCreation());
@@ -136,6 +146,7 @@ public class QuotesController {
         return quoteDto;
     }
 
+    //обработка исключения QuoteNotSavedException  - отправка сообщения об ошибке клиенту
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(QuoteNotSavedException e) {
 
@@ -143,6 +154,7 @@ public class QuotesController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    //обработка исключения QuoteNotFoundException  - отправка сообщения об ошибке клиенту
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(QuoteNotFoundException e) {
 

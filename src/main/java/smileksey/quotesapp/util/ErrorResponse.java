@@ -1,5 +1,6 @@
 package smileksey.quotesapp.util;
 
+//класс-обертка для сообщений об ошибках
 public class ErrorResponse {
     private String message;
 
