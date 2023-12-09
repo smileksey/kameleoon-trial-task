@@ -25,21 +25,15 @@ import java.util.stream.Collectors;
 public class QuotesController {
 
     private final QuotesService quotesService;
-    private final UsersService usersService;
-    private final QuoteValidator validator;
 
     @Autowired
-    public QuotesController(QuotesService quotesService, UsersService usersService, QuoteValidator validator) {
+    public QuotesController(QuotesService quotesService) {
         this.quotesService = quotesService;
-        this.usersService = usersService;
-        this.validator = validator;
     }
 
     //добавить новую цитату
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> addQuote(@RequestBody @Valid QuoteDto quoteDto, BindingResult bindingResult) {
-
-        validator.validate(quoteDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             String errorMessage = ValidationErrorMessage.createMessage(bindingResult.getFieldErrors());
